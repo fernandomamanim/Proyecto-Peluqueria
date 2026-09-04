@@ -15,6 +15,20 @@
                     <x-nav-link :href="auth()->user()->esAdministrador() ? route('admin.dashboard') : (auth()->user()->esStaff() ? route('staff.dashboard') : route('cliente.dashboard'))" :active="request()->routeIs('cliente.dashboard') || request()->routeIs('staff.dashboard') || request()->routeIs('admin.dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
+                    @if (auth()->user()->esAdministrador())
+                        <x-nav-link :href="route('admin.usuarios.index')" :active="request()->routeIs('admin.usuarios.*')">
+                            {{ __('Usuarios') }}
+                        </x-nav-link>
+                        <x-nav-link :href="route('admin.servicios.index')" :active="request()->routeIs('admin.servicios.*')">
+                            {{ __('Servicios') }}
+                        </x-nav-link>
+                    @endif
+
+                    @if (auth()->user()->esStaff())
+                        <x-nav-link :href="route('staff.horarios.index')" :active="request()->routeIs('staff.horarios.*')">
+                            {{ __('Mis horarios') }}
+                        </x-nav-link>
+                    @endif
                 </div>
             </div>
 
@@ -67,9 +81,21 @@
     <!-- Responsive Navigation Menu -->
     <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
         <div class="pt-2 pb-3 space-y-1">
-            <x-responsive-nav-link :href="auth()->user()->esAdministrador() ? route('admin.dashboard') : (auth()->user()->esStaff() ? route('staff.dashboard') : route('cliente.dashboard'))" :active="request()->routeIs('cliente.dashboard') || request()->routeIs('staff.dashboard') || request()->routeIs('admin.dashboard')">
-    {{ __('Dashboard') }}
-</x-responsive-nav-link>
+            @if (auth()->user()->esAdministrador())
+                <x-responsive-nav-link :href="route('admin.usuarios.index')" :active="request()->routeIs('admin.usuarios.*')">
+                    {{ __('Usuarios') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('admin.servicios.index')" :active="request()->routeIs('admin.servicios.*')">
+                    {{ __('Servicios') }}
+                </x-responsive-nav-link>
+            @endif
+            
+            @if (auth()->user()->esStaff())
+                <x-responsive-nav-link :href="route('staff.horarios.index')" :active="request()->routeIs('staff.horarios.*')">
+                    {{ __('Mis horarios') }}
+                </x-responsive-nav-link>
+            @endif
+
         </div>
 
         <!-- Responsive Settings Options -->

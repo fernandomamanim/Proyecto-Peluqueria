@@ -20,23 +20,31 @@ class ReservaController extends Controller
             'servicio_id' => ['required', 'exists:servicios,id'],
             'fecha' => ['required', 'date', 'after_or_equal:today'],
             'hora_inicio' => ['required', 'date_format:H:i'],
-            'hora_fin' => ['required', 'date_format:H:i', 'after:hora_inicio'],
         ]);
-
+    
+        $servicio = \App\Models\Servicio::findOrFail($datos['servicio_id']);
+    
+        $horaInicio = \Carbon\Carbon::createFromFormat('H:i', $datos['hora_inicio']);
+        $horaFin = $horaInicio->copy()->addMinutes($servicio->duracion);
+    
         $this->reservaService->validarDisponibilidad(
             $datos['peluquero_id'],
             $datos['fecha'],
-            $datos['hora_inicio'],
-            $datos['hora_fin'],
+            $horaInicio->format('H:i'),
+            $horaFin->format('H:i'),
         );
-
+    
         $reserva = Reserva::create([
-            ...$datos,
             'usuario_id' => $request->user()->id,
-            'codigo_qr' => 'QR-RES-'.Str::upper(Str::random(10)),
+            'peluquero_id' => $datos['peluquero_id'],
+            'servicio_id' => $datos['servicio_id'],
+            'fecha' => $datos['fecha'],
+            'hora_inicio' => $horaInicio->format('H:i'),
+            'hora_fin' => $horaFin->format('H:i'),
+            'codigo_qr' => 'QR-RES-'.\Illuminate\Support\Str::upper(\Illuminate\Support\Str::random(10)),
             'fecha_expiracion' => now()->addMinutes(10),
         ]);
-
+    
         return redirect()
             ->route('cliente.reservas.show', $reserva)
             ->with('success', 'Reserva creada correctamente.');

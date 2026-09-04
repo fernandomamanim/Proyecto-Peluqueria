@@ -19,6 +19,8 @@
                         <tr class="border-b">
                             <th class="py-2">Cliente</th>
                             <th class="py-2">Servicio</th>
+                            <th class="py-2">Fecha</th>
+                            <th class="py-2">Horario</th>
                             <th class="py-2">Monto</th>
                             <th class="py-2">Comprobante</th>
                             <th class="py-2">Acciones</th>
@@ -29,6 +31,8 @@
                             <tr class="border-b">
                                 <td class="py-2">{{ $pago->reserva->cliente->nombre }}</td>
                                 <td class="py-2">{{ $pago->reserva->servicio->nombre }}</td>
+                                <td class="py-2">{{ $pago->reserva->fecha->format('d/m/Y') }}</td>
+                                <td class="py-2">{{ substr($pago->reserva->hora_inicio, 0, 5) }} - {{ substr($pago->reserva->hora_fin, 0, 5) }}</td>
                                 <td class="py-2">Bs {{ $pago->monto }}</td>
                                 <td class="py-2">
                                     @if ($pago->comprobante)
@@ -58,7 +62,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="5" class="py-4 text-gray-500 text-center">No hay pagos pendientes.</td>
+                                <td colspan="7" class="py-4 text-gray-500 text-center">No hay pagos pendientes.</td>
                             </tr>
                         @endforelse
                     </tbody>

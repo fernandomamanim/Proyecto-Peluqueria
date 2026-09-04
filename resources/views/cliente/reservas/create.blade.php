@@ -52,17 +52,11 @@
                                class="mt-1 block w-full rounded border-gray-300" required>
                     </div>
 
-                    <div class="grid grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700">Hora inicio</label>
-                            <input type="time" name="hora_inicio" value="{{ old('hora_inicio') }}"
-                                   class="mt-1 block w-full rounded border-gray-300" required>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700">Hora fin</label>
-                            <input type="time" name="hora_fin" value="{{ old('hora_fin') }}"
-                                   class="mt-1 block w-full rounded border-gray-300" required>
-                        </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Hora de inicio</label>
+                        <input type="time" name="hora_inicio" value="{{ old('hora_inicio') }}"
+                               class="mt-1 block w-full rounded border-gray-300" required>
+                        <p class="text-xs text-gray-500 mt-1">La hora de fin se calcula automáticamente según la duración del servicio.</p>
                     </div>
 
                     <button type="submit" class="bg-gray-800 text-white px-4 py-2 rounded hover:bg-gray-700">

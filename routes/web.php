@@ -8,6 +8,9 @@ use App\Http\Controllers\StaffDashboardController;
 use App\Http\Controllers\Admin\UsuarioController;
 use App\Http\Controllers\Admin\CategoriaServicioController;
 use App\Http\Controllers\Admin\ServicioController;
+use App\Http\Controllers\HorarioController;
+use App\Http\Controllers\Admin\AdminDashboardController;
+
 
 Route::get('/', function () {
     return view('welcome');
@@ -22,16 +25,20 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::middleware(['auth', 'rol:Administrador'])->prefix('admin')->name('admin.')->group(function () {
-    Route::get('/dashboard', fn () => view('admin.dashboard'))->name('dashboard');
+    Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
     Route::resource('usuarios', UsuarioController::class)->except(['show']);
     Route::resource('categorias', CategoriaServicioController::class)->only(['index', 'store', 'update']);
     Route::resource('servicios', ServicioController::class)->except(['show']);
 });
 
-Route::middleware(['auth', 'rol:Staff,Administrador'])->prefix('staff')->group(function () {
-    Route::get('/dashboard', [StaffDashboardController::class, 'index'])->name('staff.dashboard');
-    Route::patch('/pagos/{pago}/aprobar', [PagoController::class, 'aprobar'])->name('staff.pagos.aprobar');
-    Route::patch('/pagos/{pago}/rechazar', [PagoController::class, 'rechazar'])->name('staff.pagos.rechazar');
+Route::middleware(['auth', 'rol:Staff,Administrador'])->prefix('staff')->name('staff.')->group(function () {
+    Route::get('/dashboard', [StaffDashboardController::class, 'index'])->name('dashboard');
+    Route::patch('/pagos/{pago}/aprobar', [PagoController::class, 'aprobar'])->name('pagos.aprobar');
+    Route::patch('/pagos/{pago}/rechazar', [PagoController::class, 'rechazar'])->name('pagos.rechazar');
+    Route::get('/horarios', [HorarioController::class, 'index'])->name('horarios.index');
+    Route::post('/horarios', [HorarioController::class, 'store'])->name('horarios.store');
+    Route::put('/horarios/{horario}', [HorarioController::class, 'update'])->name('horarios.update');
+    Route::delete('/horarios/{horario}', [HorarioController::class, 'destroy'])->name('horarios.destroy');
 });
 
 Route::middleware(['auth', 'rol:Cliente'])->group(function () {

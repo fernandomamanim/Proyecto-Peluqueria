@@ -66,4 +66,8 @@ class Usuario extends Authenticatable
     {
         return $this->hasMany(Reserva::class, 'usuario_id');
     }
+    public function peluquero(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(Peluquero::class, 'usuario_id');
+    }
 }
