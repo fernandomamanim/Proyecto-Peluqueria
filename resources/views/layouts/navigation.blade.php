@@ -22,6 +22,12 @@
                         <x-nav-link :href="route('admin.servicios.index')" :active="request()->routeIs('admin.servicios.*')">
                             {{ __('Servicios') }}
                         </x-nav-link>
+                        <x-nav-link :href="route('admin.reservas.index')" :active="request()->routeIs('admin.reservas.*')">
+                            {{ __('Reservas') }}
+                        </x-nav-link>
+                        <x-nav-link :href="route('admin.peluqueros.index')" :active="request()->routeIs('admin.peluqueros.*')">
+                            {{ __('Peluqueros') }}
+                        </x-nav-link>
                     @endif
 
                     @if (auth()->user()->esStaff())
@@ -88,6 +94,12 @@
                 <x-responsive-nav-link :href="route('admin.servicios.index')" :active="request()->routeIs('admin.servicios.*')">
                     {{ __('Servicios') }}
                 </x-responsive-nav-link>
+                <x-nav-link :href="route('admin.reservas.index')" :active="request()->routeIs('admin.reservas.*')">
+                    {{ __('Reservas') }}
+                </x-nav-link>
+                <x-nav-link :href="route('admin.peluqueros.index')" :active="request()->routeIs('admin.peluqueros.*')">
+                    {{ __('Peluqueros') }}
+                </x-nav-link>
             @endif
             
             @if (auth()->user()->esStaff())

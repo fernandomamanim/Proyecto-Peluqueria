@@ -10,6 +10,9 @@ use App\Http\Controllers\Admin\CategoriaServicioController;
 use App\Http\Controllers\Admin\ServicioController;
 use App\Http\Controllers\HorarioController;
 use App\Http\Controllers\Admin\AdminDashboardController;
+use App\Http\Controllers\Admin\ReservaController as AdminReservaController;
+use App\Http\Controllers\Admin\PeluqueroController as AdminPeluqueroController;
+use App\Http\Controllers\Admin\HorarioController as AdminHorarioController;
 
 
 Route::get('/', function () {
@@ -29,6 +32,12 @@ Route::middleware(['auth', 'rol:Administrador'])->prefix('admin')->name('admin.'
     Route::resource('usuarios', UsuarioController::class)->except(['show']);
     Route::resource('categorias', CategoriaServicioController::class)->only(['index', 'store', 'update']);
     Route::resource('servicios', ServicioController::class)->except(['show']);
+    Route::get('/reservas', [AdminReservaController::class, 'index'])->name('reservas.index');
+    Route::get('/peluqueros', [AdminPeluqueroController::class, 'index'])->name('peluqueros.index');
+    Route::get('/peluqueros/{peluquero}/horarios', [AdminHorarioController::class, 'index'])->name('peluqueros.horarios.index');
+    Route::post('/peluqueros/{peluquero}/horarios', [AdminHorarioController::class, 'store'])->name('peluqueros.horarios.store');
+    Route::put('/peluqueros/{peluquero}/horarios/{horario}', [AdminHorarioController::class, 'update'])->name('peluqueros.horarios.update');
+    Route::delete('/peluqueros/{peluquero}/horarios/{horario}', [AdminHorarioController::class, 'destroy'])->name('peluqueros.horarios.destroy');
 });
 
 Route::middleware(['auth', 'rol:Staff,Administrador'])->prefix('staff')->name('staff.')->group(function () {
@@ -39,6 +48,7 @@ Route::middleware(['auth', 'rol:Staff,Administrador'])->prefix('staff')->name('s
     Route::post('/horarios', [HorarioController::class, 'store'])->name('horarios.store');
     Route::put('/horarios/{horario}', [HorarioController::class, 'update'])->name('horarios.update');
     Route::delete('/horarios/{horario}', [HorarioController::class, 'destroy'])->name('horarios.destroy');
+    
 });
 
 Route::middleware(['auth', 'rol:Cliente'])->group(function () {
