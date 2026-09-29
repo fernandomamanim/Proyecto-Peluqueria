@@ -8,33 +8,38 @@ use Illuminate\Http\Request;
 
 class PagoController extends Controller
 {
+    private const PORCENTAJE_DESCUENTO_CLIENTE = 8.00;
+
     public function store(Request $request, Reserva $reserva)
     {
+        if ($reserva->usuario_id) {
+            abort_if(! $request->user() || $request->user()->id !== $reserva->usuario_id, 403);
+        }
+
         $datos = $request->validate([
-            'monto' => ['required', 'numeric', 'min:0'],
             'metodo_pago' => ['required', 'in:QR,Efectivo'],
             'comprobante' => ['required_if:metodo_pago,QR', 'file', 'image', 'max:4096'],
         ]);
 
-        if ($reserva->usuario_id !== $request->user()->id) {
-            abort(403, 'No puedes registrar un pago para una reserva que no es tuya.');
-        }
+        $descuento = $reserva->usuario_id ? self::PORCENTAJE_DESCUENTO_CLIENTE : 0;
+        $monto = round($reserva->servicio->precio * (1 - $descuento / 100), 2);
 
         $rutaComprobante = null;
         if ($request->hasFile('comprobante')) {
             $rutaComprobante = $request->file('comprobante')->store('comprobantes', 'public');
         }
 
-        $pago = Pago::create([
+        Pago::create([
             'reserva_id' => $reserva->id,
-            'monto' => $datos['monto'],
+            'monto' => $monto,
+            'descuento' => $descuento,
             'metodo_pago' => $datos['metodo_pago'],
             'comprobante' => $rutaComprobante,
             'estado' => 'Pendiente',
         ]);
 
         return redirect()
-            ->route('cliente.reservas.show', $reserva)
+            ->route('reservas.show', $reserva)
             ->with('success', 'Comprobante subido. Tu pago está pendiente de aprobación.');
     }
 
@@ -42,11 +47,7 @@ class PagoController extends Controller
     {
         $this->autorizarStaff($request);
 
-        $pago->update([
-            'estado' => 'Aprobado',
-            'fecha_pago' => now(),
-        ]);
-
+        $pago->update(['estado' => 'Aprobado', 'fecha_pago' => now()]);
         $pago->reserva->update(['estado' => 'Confirmada']);
 
         return back()->with('success', 'Pago aprobado y reserva confirmada.');
@@ -56,14 +57,9 @@ class PagoController extends Controller
     {
         $this->autorizarStaff($request);
 
-        $datos = $request->validate([
-            'observaciones' => ['nullable', 'string', 'max:500'],
-        ]);
+        $datos = $request->validate(['observaciones' => ['nullable', 'string', 'max:500']]);
 
-        $pago->update([
-            'estado' => 'Rechazado',
-            'observaciones' => $datos['observaciones'] ?? null,
-        ]);
+        $pago->update(['estado' => 'Rechazado', 'observaciones' => $datos['observaciones'] ?? null]);
 
         return back()->with('success', 'Pago rechazado.');
     }

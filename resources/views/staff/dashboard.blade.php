@@ -29,7 +29,12 @@
                     <tbody>
                         @forelse ($pagosPendientes as $pago)
                             <tr class="border-b">
-                                <td class="py-2">{{ $pago->reserva->cliente->nombre }}</td>
+                                <td class="py-2">
+                                    {{ $pago->reserva->nombre_cliente }}
+                                    @if ($pago->reserva->telefono_cliente)
+                                        <br><span class="text-xs text-gray-500">{{ $pago->reserva->telefono_cliente }}</span>
+                                    @endif
+                                </td>
                                 <td class="py-2">{{ $pago->reserva->servicio->nombre }}</td>
                                 <td class="py-2">{{ $pago->reserva->fecha->format('d/m/Y') }}</td>
                                 <td class="py-2">{{ substr($pago->reserva->hora_inicio, 0, 5) }} - {{ substr($pago->reserva->hora_fin, 0, 5) }}</td>

@@ -48,7 +48,12 @@
                     <tbody>
                         @forelse ($reservas as $reserva)
                             <tr class="border-b">
-                                <td class="py-2">{{ $reserva->cliente->nombre }} {{ $reserva->cliente->primer_apellido }}</td>
+                                <td class="py-2">
+                                    {{ $reserva->nombre_cliente }}
+                                    @unless ($reserva->usuario_id)
+                                        <span class="text-xs text-gray-400">(invitado)</span>
+                                    @endunless
+                                </td>
                                 <td class="py-2">{{ $reserva->peluquero->usuario->nombre }}</td>
                                 <td class="py-2">{{ $reserva->servicio->nombre }}</td>
                                 <td class="py-2">{{ $reserva->fecha->format('d/m/Y') }}</td>

@@ -15,7 +15,8 @@ class Reserva extends Model
     protected $table = 'reservas';
 
     protected $fillable = [
-        'usuario_id', 'peluquero_id', 'servicio_id',
+        'usuario_id', 'nombre_invitado', 'telefono_invitado',
+        'peluquero_id', 'servicio_id',
         'fecha', 'hora_inicio', 'hora_fin', 'estado',
         'codigo_qr', 'fecha_expiracion', 'observaciones',
     ];
@@ -46,5 +47,16 @@ class Reserva extends Model
     public function pago(): HasOne
     {
         return $this->hasOne(Pago::class, 'reserva_id');
+    }
+    public function getNombreClienteAttribute(): string
+    {
+        return $this->cliente
+            ? trim($this->cliente->nombre.' '.$this->cliente->primer_apellido)
+            : ($this->nombre_invitado ?? 'Invitado');
+    }
+    
+    public function getTelefonoClienteAttribute(): ?string
+    {
+        return $this->cliente ? $this->cliente->telefono : $this->telefono_invitado;
     }
 }

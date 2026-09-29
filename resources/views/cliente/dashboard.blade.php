@@ -17,7 +17,7 @@
             <div class="bg-white shadow rounded-lg p-6">
                 <div class="flex justify-between items-center mb-4">
                     <h3 class="text-lg font-semibold">Mis reservas</h3>
-                    <a href="{{ route('cliente.reservas.create') }}"
+                    <a href="{{ route('reservas.create') }}"
                        class="bg-gray-800 text-white px-4 py-2 rounded hover:bg-gray-700">
                         Nueva reserva
                     </a>
@@ -51,7 +51,7 @@
                                     </span>
                                 </td>
                                 <td class="py-2">
-                                    <a href="{{ route('cliente.reservas.show', $reserva) }}" class="text-blue-600 hover:underline">
+                                    <a href="{{ route('reservas.show', $reserva) }}" class="text-blue-600 hover:underline">
                                         Ver
                                     </a>
                                 </td>
