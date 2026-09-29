@@ -89,10 +89,12 @@ class ReservaController extends Controller
             abort_if(! $request->user() || $request->user()->id !== $reserva->usuario_id, 403);
         }
 
-        $reserva->load(['servicio', 'peluquero.usuario', 'pago']);
+        $reserva->load(['servicio', 'peluquero.usuario', 'pago', 'reservaProductos.producto']);
+        $productos = \App\Models\Producto::where('estado', 'activo')->where('stock', '>', 0)->get();
 
-        return view('reservas.show', compact('reserva'));
+        return view('reservas.show', compact('reserva', 'productos'));
     }
+    
     public function disponibilidad(Request $request)
     {
         $datos = $request->validate([

@@ -59,4 +59,13 @@ class Reserva extends Model
     {
         return $this->cliente ? $this->cliente->telefono : $this->telefono_invitado;
     }
+    public function reservaProductos(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(ReservaProducto::class, 'reserva_id');
+    }
+    
+    public function getTotalProductosAttribute(): float
+    {
+        return $this->reservaProductos->sum('subtotal');
+    }
 }

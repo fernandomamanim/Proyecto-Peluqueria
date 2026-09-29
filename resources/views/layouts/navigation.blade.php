@@ -28,11 +28,17 @@
                         <x-nav-link :href="route('admin.peluqueros.index')" :active="request()->routeIs('admin.peluqueros.*')">
                             {{ __('Peluqueros') }}
                         </x-nav-link>
+                        <x-nav-link :href="route('admin.productos.index')" :active="request()->routeIs('admin.productos.*') || request()->routeIs('admin.proveedores.*')">
+                            {{ __('Productos') }}
+                        </x-nav-link>
                     @endif
 
                     @if (auth()->user()->esStaff())
                         <x-nav-link :href="route('staff.horarios.index')" :active="request()->routeIs('staff.horarios.*')">
                             {{ __('Mis horarios') }}
+                        </x-nav-link>
+                        <x-nav-link :href="route('staff.reservas.index')" :active="request()->routeIs('staff.reservas.*')">
+                            {{ __('Mis reservas') }}
                         </x-nav-link>
                     @endif
                 </div>
@@ -100,12 +106,18 @@
                 <x-nav-link :href="route('admin.peluqueros.index')" :active="request()->routeIs('admin.peluqueros.*')">
                     {{ __('Peluqueros') }}
                 </x-nav-link>
+                <x-nav-link :href="route('admin.productos.index')" :active="request()->routeIs('admin.productos.*') || request()->routeIs('admin.proveedores.*')">
+                    {{ __('Productos') }}
+                </x-nav-link>
             @endif
             
             @if (auth()->user()->esStaff())
                 <x-responsive-nav-link :href="route('staff.horarios.index')" :active="request()->routeIs('staff.horarios.*')">
                     {{ __('Mis horarios') }}
                 </x-responsive-nav-link>
+                <x-nav-link :href="route('staff.reservas.index')" :active="request()->routeIs('staff.reservas.*')">
+                    {{ __('Mis reservas') }}
+                </x-nav-link>
             @endif
 
         </div>

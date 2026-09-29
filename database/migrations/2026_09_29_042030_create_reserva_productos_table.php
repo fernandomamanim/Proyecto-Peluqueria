@@ -13,6 +13,11 @@ return new class extends Migration
     {
         Schema::create('reserva_productos', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('reserva_id')->constrained('reservas');
+            $table->foreignId('producto_id')->constrained('productos');
+            $table->integer('cantidad');
+            $table->decimal('precio', 10, 2)->comment('Precio unitario al momento de la venta');
+            $table->decimal('subtotal', 10, 2);
             $table->timestamps();
         });
     }

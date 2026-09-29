@@ -22,7 +22,8 @@ class PagoController extends Controller
         ]);
 
         $descuento = $reserva->usuario_id ? self::PORCENTAJE_DESCUENTO_CLIENTE : 0;
-        $monto = round($reserva->servicio->precio * (1 - $descuento / 100), 2);
+        $totalBruto = $reserva->servicio->precio + $reserva->total_productos;
+        $monto = round($totalBruto * (1 - $descuento / 100), 2);
 
         $rutaComprobante = null;
         if ($request->hasFile('comprobante')) {
@@ -74,13 +75,13 @@ class PagoController extends Controller
     public function reactivar(Request $request, Pago $pago)
     {
         $this->autorizarStaff($request);
-    
+
         if ($pago->estado === 'Aprobado') {
             $pago->reserva->update(['estado' => 'Pendiente']);
         }
-    
+
         $pago->update(['estado' => 'Pendiente', 'fecha_pago' => null, 'observaciones' => null]);
-    
+
         return back()->with('success', 'Pago reactivado — vuelve a estar pendiente de revisión.');
     }
 }

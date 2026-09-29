@@ -45,18 +45,86 @@
             </div>
 
             @if (! $reserva->pago)
+            @if ($reserva->reservaProductos->isNotEmpty())
+                        <div class="text-sm mb-2">
+                            <p class="font-medium">Productos:</p>
+                            <ul class="list-disc list-inside text-gray-600">
+                                @foreach ($reserva->reservaProductos as $rp)
+                                    <li>{{ $rp->producto->nombre }} x{{ $rp->cantidad }} — Bs {{ $rp->subtotal }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+            @endif
+            <div class="bg-white shadow rounded-lg p-6">
+                <h3 class="text-lg font-semibold mb-4">Agregar productos (opcional)</h3>
+                <p class="text-xs text-gray-500 mb-4">Puedes agregar productos como shampoo o cera que quieras adquirir junto con tu servicio.</p>
+
+                <form method="POST" action="{{ route('reservas.productos.store', $reserva) }}" class="flex gap-4 items-end mb-4 flex-wrap">
+                    @csrf
+                    <div class="flex-1">
+                        <label class="block text-sm font-medium text-gray-700">Producto</label>
+                        <select name="producto_id" class="mt-1 block w-full rounded border-gray-300" required>
+                            <option value="">Selecciona un producto</option>
+                            @foreach ($productos as $producto)
+                                <option value="{{ $producto->id }}">
+                                    {{ $producto->nombre }} — Bs {{ $producto->precio }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Cantidad</label>
+                        <input type="number" name="cantidad" min="1" value="1" class="mt-1 block w-20 rounded border-gray-300" required>
+                    </div>
+                    <button type="submit" class="bg-gray-800 text-white px-4 py-2 rounded hover:bg-gray-700">
+                        Agregar
+                    </button>
+                </form>
+
+                @if ($reserva->reservaProductos->isNotEmpty())
+                    <table class="w-full text-left text-sm">
+                        <thead>
+                            <tr class="border-b">
+                                <th class="py-2">Producto</th>
+                                <th class="py-2">Cantidad</th>
+                                <th class="py-2">Subtotal</th>
+                                <th class="py-2"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($reserva->reservaProductos as $rp)
+                                <tr class="border-b">
+                                    <td class="py-2">{{ $rp->producto->nombre }}</td>
+                                    <td class="py-2">{{ $rp->cantidad }}</td>
+                                    <td class="py-2">Bs {{ $rp->subtotal }}</td>
+                                    <td class="py-2">
+                                        <form method="POST" action="{{ route('reservas.productos.destroy', [$reserva, $rp]) }}" class="inline">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="text-red-600 hover:underline text-xs">Quitar</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                @endif
+            </div>
                 @php
                     $descuento = $reserva->usuario_id ? 8 : 0;
-                    $montoFinal = round($reserva->servicio->precio * (1 - $descuento / 100), 2);
+                    $totalBruto = $reserva->servicio->precio + $reserva->total_productos;
+                    $montoFinal = round($totalBruto * (1 - $descuento / 100), 2);
                 @endphp
-
+                
                 <div class="bg-white shadow rounded-lg p-6">
                     <h3 class="text-lg font-semibold mb-4">Registrar pago</h3>
-
                     <p class="text-sm mb-4">
-                        Precio del servicio: Bs {{ number_format($reserva->servicio->precio, 2) }}
+                        Servicio: Bs {{ number_format($reserva->servicio->precio, 2) }}
+                        @if ($reserva->total_productos > 0)
+                            <br>Productos: Bs {{ number_format($reserva->total_productos, 2) }}
+                        @endif
                         @if ($descuento > 0)
-                            <br>Descuento por cliente registrado ({{ $descuento }}%): -Bs {{ number_format($reserva->servicio->precio - $montoFinal, 2) }}
+                            <br>Descuento por cliente registrado ({{ $descuento }}%): -Bs {{ number_format($totalBruto - $montoFinal, 2) }}
                         @endif
                         <br><strong>Total a pagar: Bs {{ number_format($montoFinal, 2) }}</strong>
                     </p>

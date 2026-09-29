@@ -28,4 +28,8 @@ class Peluquero extends Model
     {
         return $this->hasMany(Reserva::class, 'peluquero_id');
     }
+    public function asistencias(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Asistencia::class, 'peluquero_id');
+    }
 }

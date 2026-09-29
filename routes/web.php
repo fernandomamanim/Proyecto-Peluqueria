@@ -13,6 +13,10 @@ use App\Http\Controllers\ReservaController;
 use App\Http\Controllers\StaffDashboardController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Admin\ProductoController;
+use App\Http\Controllers\Admin\ProveedorController;
+use App\Http\Controllers\StaffReservaController;
+use App\Http\Controllers\ReservaProductoController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -24,6 +28,8 @@ Route::post('/reservar', [ReservaController::class, 'store'])->name('reservas.st
 Route::get('/reservas/{reserva}', [ReservaController::class, 'show'])->name('reservas.show');
 Route::post('/reservas/{reserva}/pago', [PagoController::class, 'store'])->name('reservas.pagos.store');
 Route::get('/disponibilidad', [ReservaController::class, 'disponibilidad'])->name('reservas.disponibilidad');
+Route::post('/reservas/{reserva}/productos', [ReservaProductoController::class, 'store'])->name('reservas.productos.store');
+Route::delete('/reservas/{reserva}/productos/{reservaProducto}', [ReservaProductoController::class, 'destroy'])->name('reservas.productos.destroy');
 
 Route::middleware(['auth', 'rol:Administrador'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
@@ -36,6 +42,9 @@ Route::middleware(['auth', 'rol:Administrador'])->prefix('admin')->name('admin.'
     Route::post('/peluqueros/{peluquero}/horarios', [AdminHorarioController::class, 'store'])->name('peluqueros.horarios.store');
     Route::put('/peluqueros/{peluquero}/horarios/{horario}', [AdminHorarioController::class, 'update'])->name('peluqueros.horarios.update');
     Route::delete('/peluqueros/{peluquero}/horarios/{horario}', [AdminHorarioController::class, 'destroy'])->name('peluqueros.horarios.destroy');
+    Route::resource('proveedores', ProveedorController::class)->only(['index', 'store', 'update']);
+    Route::resource('productos', ProductoController::class)->except(['show']);
+    Route::patch('/productos/{producto}/ajustar-stock', [ProductoController::class, 'ajustarStock'])->name('productos.ajustar-stock');
 });
 
 Route::middleware(['auth', 'rol:Staff,Administrador'])->prefix('staff')->name('staff.')->group(function () {
@@ -47,6 +56,10 @@ Route::middleware(['auth', 'rol:Staff,Administrador'])->prefix('staff')->name('s
     Route::put('/horarios/{horario}', [HorarioController::class, 'update'])->name('horarios.update');
     Route::delete('/horarios/{horario}', [HorarioController::class, 'destroy'])->name('horarios.destroy');
     Route::patch('/pagos/{pago}/reactivar', [PagoController::class, 'reactivar'])->name('pagos.reactivar');
+    Route::get('/reservas', [StaffReservaController::class, 'index'])->name('reservas.index');
+    Route::get('/reservas/{reserva}', [StaffReservaController::class, 'show'])->name('reservas.show');
+    Route::post('/reservas/{reserva}/productos', [ReservaProductoController::class, 'store'])->name('reservas.productos.store');
+    Route::delete('/reservas/{reserva}/productos/{reservaProducto}', [ReservaProductoController::class, 'destroy'])->name('reservas.productos.destroy');
 });
 
 Route::middleware(['auth', 'rol:Cliente'])->group(function () {
