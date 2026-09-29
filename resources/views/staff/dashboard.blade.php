@@ -73,6 +73,57 @@
                     </tbody>
                 </table>
             </div>
+            <div class="bg-white shadow rounded-lg p-6 mt-6">
+                <h3 class="text-lg font-semibold mb-4">Pagos revisados recientemente</h3>
+                <p class="text-xs text-gray-500 mb-4">Últimos 20 pagos aprobados o rechazados. Puedes reactivarlos si necesitas corregir una decisión.</p>
+            
+                <table class="w-full text-left text-sm">
+                    <thead>
+                        <tr class="border-b">
+                            <th class="py-2">Cliente</th>
+                            <th class="py-2">Servicio</th>
+                            <th class="py-2">Fecha</th>
+                            <th class="py-2">Monto</th>
+                            <th class="py-2">Estado</th>
+                            <th class="py-2">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse ($pagosRevisados as $pago)
+                            <tr class="border-b">
+                                <td class="py-2">
+                                    {{ $pago->reserva->nombre_cliente }}
+                                    @if ($pago->reserva->telefono_cliente)
+                                        <br><span class="text-xs text-gray-500">{{ $pago->reserva->telefono_cliente }}</span>
+                                    @endif
+                                </td>
+                                <td class="py-2">{{ $pago->reserva->servicio->nombre }}</td>
+                                <td class="py-2">{{ $pago->reserva->fecha->format('d/m/Y') }}</td>
+                                <td class="py-2">Bs {{ $pago->monto }}</td>
+                                <td class="py-2">
+                                    <span class="px-2 py-1 rounded text-xs {{ $pago->estado === 'Aprobado' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
+                                        {{ $pago->estado }}
+                                    </span>
+                                </td>
+                                <td class="py-2">
+                                    <form method="POST" action="{{ route('staff.pagos.reactivar', $pago) }}" class="inline"
+                                          onsubmit="return confirm('¿Reactivar este pago? Volverá a quedar pendiente de revisión.')">
+                                        @csrf
+                                        @method('PATCH')
+                                        <button type="submit" class="bg-yellow-500 text-white px-3 py-1 rounded text-sm hover:bg-yellow-600">
+                                            Reactivar
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="6" class="py-4 text-gray-500 text-center">Aún no hay pagos revisados.</td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </x-app-layout>

@@ -11,10 +11,8 @@ class StaffDashboardController extends Controller
     {
         $usuario = $request->user();
 
-        $query = Pago::with(['reserva.cliente', 'reserva.servicio'])
-            ->where('estado', 'Pendiente');
+        $base = Pago::with(['reserva.servicio']);
 
-        // El Administrador ve todos los pagos; el Staff solo los de sus propias reservas
         if ($usuario->esStaff()) {
             $peluquero = $usuario->peluquero;
 
@@ -22,13 +20,17 @@ class StaffDashboardController extends Controller
                 abort(403, 'Tu usuario no tiene un perfil de peluquero asociado.');
             }
 
-            $query->whereHas('reserva', function ($q) use ($peluquero) {
+            $base->whereHas('reserva', function ($q) use ($peluquero) {
                 $q->where('peluquero_id', $peluquero->id);
             });
         }
 
-        $pagosPendientes = $query->get();
+        $pagosPendientes = (clone $base)->where('estado', 'Pendiente')->get();
+        $pagosRevisados = (clone $base)->whereIn('estado', ['Aprobado', 'Rechazado'])
+            ->orderByDesc('updated_at')
+            ->limit(20)
+            ->get();
 
-        return view('staff.dashboard', compact('pagosPendientes'));
+        return view('staff.dashboard', compact('pagosPendientes', 'pagosRevisados'));
     }
 }

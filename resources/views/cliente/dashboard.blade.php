@@ -16,7 +16,7 @@
 
             <div class="bg-white shadow rounded-lg p-6">
                 <div class="flex justify-between items-center mb-4">
-                    <h3 class="text-lg font-semibold">Mis reservas</h3>
+                    <h3 class="text-lg font-semibold">Mis reservas activas</h3>
                     <a href="{{ route('reservas.create') }}"
                        class="bg-gray-800 text-white px-4 py-2 rounded hover:bg-gray-700">
                         Nueva reserva
@@ -34,9 +34,9 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @forelse ($reservas as $reserva)
+                        @forelse ($reservasActivas as $reserva)
                             <tr class="border-b">
-                                <td class="py-2">{{ $reserva->fecha->format('d/m/Y') }} {{ $reserva->hora_inicio }}</td>
+                                <td class="py-2">{{ $reserva->fecha->format('d/m/Y') }} {{ substr($reserva->hora_inicio, 0, 5) }}</td>
                                 <td class="py-2">{{ $reserva->servicio->nombre }}</td>
                                 <td class="py-2">{{ $reserva->peluquero->usuario->nombre }}</td>
                                 <td class="py-2">
@@ -44,6 +44,47 @@
                                         @class([
                                             'bg-yellow-100 text-yellow-800' => $reserva->estado === 'Pendiente',
                                             'bg-green-100 text-green-800' => $reserva->estado === 'Confirmada',
+                                        ])">
+                                        {{ $reserva->estado }}
+                                    </span>
+                                </td>
+                                <td class="py-2">
+                                    <a href="{{ route('reservas.show', $reserva) }}" class="text-blue-600 hover:underline">
+                                        Ver
+                                    </a>
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="5" class="py-4 text-gray-500 text-center">No tienes reservas activas.</td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="bg-white shadow rounded-lg p-6">
+                <h3 class="text-lg font-semibold mb-4">Historial de reservas</h3>
+
+                <table class="w-full text-left">
+                    <thead>
+                        <tr class="border-b">
+                            <th class="py-2">Fecha</th>
+                            <th class="py-2">Servicio</th>
+                            <th class="py-2">Peluquero</th>
+                            <th class="py-2">Estado</th>
+                            <th class="py-2"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse ($reservasHistorial as $reserva)
+                            <tr class="border-b">
+                                <td class="py-2">{{ $reserva->fecha->format('d/m/Y') }} {{ substr($reserva->hora_inicio, 0, 5) }}</td>
+                                <td class="py-2">{{ $reserva->servicio->nombre }}</td>
+                                <td class="py-2">{{ $reserva->peluquero->usuario->nombre }}</td>
+                                <td class="py-2">
+                                    <span class="px-2 py-1 rounded text-xs
+                                        @class([
                                             'bg-red-100 text-red-800' => in_array($reserva->estado, ['Cancelada', 'Expirada']),
                                             'bg-gray-100 text-gray-800' => $reserva->estado === 'Finalizada',
                                         ])">
@@ -58,7 +99,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="5" class="py-4 text-gray-500 text-center">Aún no tienes reservas.</td>
+                                <td colspan="5" class="py-4 text-gray-500 text-center">Aún no tienes historial.</td>
                             </tr>
                         @endforelse
                     </tbody>

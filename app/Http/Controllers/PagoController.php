@@ -71,5 +71,16 @@ class PagoController extends Controller
             abort(403, 'No tienes permiso para gestionar pagos.');
         }
     }
+    public function reactivar(Request $request, Pago $pago)
+    {
+        $this->autorizarStaff($request);
     
+        if ($pago->estado === 'Aprobado') {
+            $pago->reserva->update(['estado' => 'Pendiente']);
+        }
+    
+        $pago->update(['estado' => 'Pendiente', 'fecha_pago' => null, 'observaciones' => null]);
+    
+        return back()->with('success', 'Pago reactivado — vuelve a estar pendiente de revisión.');
+    }
 }

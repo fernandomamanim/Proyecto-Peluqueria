@@ -11,3 +11,4 @@ Artisan::command('inspire', function () {
 
 
 Schedule::command('reservas:expirar')->everyMinute();
+Schedule::command('reservas:finalizar')->everyMinute();

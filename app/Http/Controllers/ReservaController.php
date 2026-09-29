@@ -17,13 +17,16 @@ class ReservaController extends Controller
 
     public function index(Request $request)
     {
-        $reservas = $request->user()
+        $todas = $request->user()
             ->reservas()
             ->with(['servicio', 'peluquero.usuario', 'pago'])
             ->orderByDesc('fecha')
             ->get();
-
-        return view('cliente.dashboard', compact('reservas'));
+    
+        $reservasActivas = $todas->whereIn('estado', ['Pendiente', 'Confirmada']);
+        $reservasHistorial = $todas->whereIn('estado', ['Finalizada', 'Cancelada', 'Expirada']);
+    
+        return view('cliente.dashboard', compact('reservasActivas', 'reservasHistorial'));
     }
 
     public function create()
@@ -96,15 +99,15 @@ class ReservaController extends Controller
             'peluquero_id' => ['required', 'exists:peluqueros,id'],
             'fecha' => ['required', 'date'],
         ]);
-    
+
         $diasSemana = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
         $diaSemana = $diasSemana[\Carbon\Carbon::parse($datos['fecha'])->dayOfWeek];
-    
+
         $horario = \App\Models\Horario::where('peluquero_id', $datos['peluquero_id'])
             ->where('dia_semana', $diaSemana)
             ->where('estado', 'Disponible')
             ->first();
-    
+
         $ocupados = \App\Models\Reserva::where('peluquero_id', $datos['peluquero_id'])
             ->where('fecha', $datos['fecha'])
             ->whereIn('estado', ['Pendiente', 'Confirmada'])
@@ -114,7 +117,7 @@ class ReservaController extends Controller
                 'inicio' => substr($r->hora_inicio, 0, 5),
                 'fin' => substr($r->hora_fin, 0, 5),
             ]);
-    
+
         return response()->json([
             'dia_semana' => $diaSemana,
             'atiende' => (bool) $horario,

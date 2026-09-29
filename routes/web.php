@@ -46,6 +46,7 @@ Route::middleware(['auth', 'rol:Staff,Administrador'])->prefix('staff')->name('s
     Route::post('/horarios', [HorarioController::class, 'store'])->name('horarios.store');
     Route::put('/horarios/{horario}', [HorarioController::class, 'update'])->name('horarios.update');
     Route::delete('/horarios/{horario}', [HorarioController::class, 'destroy'])->name('horarios.destroy');
+    Route::patch('/pagos/{pago}/reactivar', [PagoController::class, 'reactivar'])->name('pagos.reactivar');
 });
 
 Route::middleware(['auth', 'rol:Cliente'])->group(function () {
