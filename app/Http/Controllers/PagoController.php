@@ -71,4 +71,5 @@ class PagoController extends Controller
             abort(403, 'No tienes permiso para gestionar pagos.');
         }
     }
+    
 }

@@ -90,4 +90,37 @@ class ReservaController extends Controller
 
         return view('reservas.show', compact('reserva'));
     }
+    public function disponibilidad(Request $request)
+    {
+        $datos = $request->validate([
+            'peluquero_id' => ['required', 'exists:peluqueros,id'],
+            'fecha' => ['required', 'date'],
+        ]);
+    
+        $diasSemana = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+        $diaSemana = $diasSemana[\Carbon\Carbon::parse($datos['fecha'])->dayOfWeek];
+    
+        $horario = \App\Models\Horario::where('peluquero_id', $datos['peluquero_id'])
+            ->where('dia_semana', $diaSemana)
+            ->where('estado', 'Disponible')
+            ->first();
+    
+        $ocupados = \App\Models\Reserva::where('peluquero_id', $datos['peluquero_id'])
+            ->where('fecha', $datos['fecha'])
+            ->whereIn('estado', ['Pendiente', 'Confirmada'])
+            ->orderBy('hora_inicio')
+            ->get(['hora_inicio', 'hora_fin'])
+            ->map(fn ($r) => [
+                'inicio' => substr($r->hora_inicio, 0, 5),
+                'fin' => substr($r->hora_fin, 0, 5),
+            ]);
+    
+        return response()->json([
+            'dia_semana' => $diaSemana,
+            'atiende' => (bool) $horario,
+            'horario_inicio' => $horario ? substr($horario->hora_inicio, 0, 5) : null,
+            'horario_fin' => $horario ? substr($horario->hora_fin, 0, 5) : null,
+            'ocupados' => $ocupados,
+        ]);
+    }
 }

@@ -23,6 +23,7 @@ Route::get('/reservar', [ReservaController::class, 'create'])->name('reservas.cr
 Route::post('/reservar', [ReservaController::class, 'store'])->name('reservas.store');
 Route::get('/reservas/{reserva}', [ReservaController::class, 'show'])->name('reservas.show');
 Route::post('/reservas/{reserva}/pago', [PagoController::class, 'store'])->name('reservas.pagos.store');
+Route::get('/disponibilidad', [ReservaController::class, 'disponibilidad'])->name('reservas.disponibilidad');
 
 Route::middleware(['auth', 'rol:Administrador'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
