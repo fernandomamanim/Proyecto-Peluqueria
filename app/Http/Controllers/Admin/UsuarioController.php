@@ -36,11 +36,13 @@ class UsuarioController extends Controller
             'password' => ['required', 'string', 'min:8'],
             'especialidad' => ['nullable', 'string', 'max:120'],
             'descripcion' => ['nullable', 'string'],
+            'salario_mensual' => ['nullable', 'numeric', 'min:0'],
         ]);
 
         $especialidad = $datos['especialidad'] ?? null;
         $descripcion = $datos['descripcion'] ?? null;
-        unset($datos['especialidad'], $datos['descripcion']);
+        $salarioMensual = $datos['salario_mensual'] ?? 0;
+        unset($datos['especialidad'], $datos['descripcion'], $datos['salario_mensual']);
 
         $datos['password'] = Hash::make($datos['password']);
 
@@ -54,6 +56,17 @@ class UsuarioController extends Controller
                 'estado' => 'activo',
             ]);
         }
+        if ($usuario->rol->nombre === 'Staff') {
+            \App\Models\Peluquero::updateOrCreate(
+                ['usuario_id' => $usuario->id],
+                [
+                    'especialidad' => $especialidad,
+                    'descripcion' => $descripcion,
+                    'salario_mensual' => $datos['salario_mensual'] ?? 0,
+                    'estado' => 'activo',
+                ]
+            );
+        }
 
         return redirect()->route('admin.usuarios.index')->with('success', 'Usuario creado correctamente.');
     }
@@ -66,34 +79,41 @@ class UsuarioController extends Controller
     }
 
     public function update(Request $request, Usuario $usuario)
-{
-    $datos = $request->validate([
-        'rol_id' => ['required', 'exists:roles,id'],
-        'nombre' => ['required', 'string', 'max:80'],
-        'primer_apellido' => ['required', 'string', 'max:80'],
-        'segundo_apellido' => ['nullable', 'string', 'max:80'],
-        'correo' => ['required', 'email', 'max:120', 'unique:usuarios,correo,'.$usuario->id],
-        'telefono' => ['nullable', 'string', 'max:20'],
-        'estado' => ['required', 'in:activo,inactivo'],
-        'especialidad' => ['nullable', 'string', 'max:120'],
-        'descripcion' => ['nullable', 'string'],
-    ]);
-
-    $especialidad = $datos['especialidad'] ?? null;
-    $descripcion = $datos['descripcion'] ?? null;
-    unset($datos['especialidad'], $datos['descripcion']);
-
-    $usuario->update($datos);
-
-    if ($usuario->rol->nombre === 'Staff') {
-        \App\Models\Peluquero::updateOrCreate(
-            ['usuario_id' => $usuario->id],
-            ['especialidad' => $especialidad, 'descripcion' => $descripcion, 'estado' => $usuario->estado]
-        );
+    {
+        $datos = $request->validate([
+            'rol_id' => ['required', 'exists:roles,id'],
+            'nombre' => ['required', 'string', 'max:80'],
+            'primer_apellido' => ['required', 'string', 'max:80'],
+            'segundo_apellido' => ['nullable', 'string', 'max:80'],
+            'correo' => ['required', 'email', 'max:120', 'unique:usuarios,correo,'.$usuario->id],
+            'telefono' => ['nullable', 'string', 'max:20'],
+            'estado' => ['required', 'in:activo,inactivo'],
+            'especialidad' => ['nullable', 'string', 'max:120'],
+            'descripcion' => ['nullable', 'string'],
+            'salario_mensual' => ['nullable', 'numeric', 'min:0'],
+        ]);
+    
+        $especialidad = $datos['especialidad'] ?? null;
+        $descripcion = $datos['descripcion'] ?? null;
+        $salarioMensual = $datos['salario_mensual'] ?? 0;
+        unset($datos['especialidad'], $datos['descripcion'], $datos['salario_mensual']);
+    
+        $usuario->update($datos);
+    
+        if ($usuario->rol->nombre === 'Staff') {
+            \App\Models\Peluquero::updateOrCreate(
+                ['usuario_id' => $usuario->id],
+                [
+                    'especialidad' => $especialidad,
+                    'descripcion' => $descripcion,
+                    'salario_mensual' => $salarioMensual,
+                    'estado' => $usuario->estado,
+                ]
+            );
+        }
+    
+        return redirect()->route('admin.usuarios.index')->with('success', 'Usuario actualizado correctamente.');
     }
-
-    return redirect()->route('admin.usuarios.index')->with('success', 'Usuario actualizado correctamente.');
-}
 
     public function destroy(Usuario $usuario)
     {

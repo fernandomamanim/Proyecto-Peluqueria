@@ -1,0 +1,92 @@
+:root {
+    --negro: #161514;
+    --negro-tarjeta: #221f1d;
+    --hueso: #f2efe9;
+    --hueso-tenue: #b9b3a8;
+    --rojo: #a32026;
+    --rojo-brillante: #c72a31;
+    --linea: #4a3f35;
+}
+
+/* ===== Base de marca (páginas 100% custom, como welcome) ===== */
+.pagina-marca {
+    background-color: var(--negro);
+    background-image:
+        radial-gradient(circle at 20% 20%, rgba(163,32,38,0.06), transparent 40%),
+        repeating-linear-gradient(0deg, rgba(255,255,255,0.015) 0px, rgba(255,255,255,0.015) 1px, transparent 1px, transparent 3px);
+    color: var(--hueso);
+    font-family: 'Work Sans', sans-serif;
+    line-height: 1.6;
+    margin: 0;
+}
+.pagina-marca a { color: inherit; }
+.marca-titulo { font-family: 'Pirata One', cursive; letter-spacing: 0.02em; }
+.titulo-seccion {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(2rem, 5vw, 3rem);
+    letter-spacing: 0.04em;
+    color: var(--hueso);
+    margin: 0 0 0.2em;
+}
+.contenedor-marca { max-width: 960px; margin: 0 auto; padding: 0 1.5rem; }
+
+/* NAV compartida */
+.navbar-marca {
+    position: sticky; top: 0; z-index: 10;
+    background: rgba(22, 21, 20, 0.92);
+    backdrop-filter: blur(6px);
+    border-bottom: 1px solid var(--linea);
+}
+.navbar-marca .contenedor-marca { display: flex; align-items: center; justify-content: space-between; padding: 0.9rem 1.5rem; }
+.navbar-marca .nombre { font-size: 1.4rem; }
+.navbar-marca .enlaces a { text-decoration: none; color: var(--hueso-tenue); font-size: 0.9rem; margin-left: 1.4rem; }
+.navbar-marca .enlaces a:hover { color: var(--hueso); }
+.navbar-marca .enlaces a.boton { color: var(--hueso); background: var(--rojo); padding: 0.5rem 1.1rem; border-radius: 2px; }
+.navbar-marca .enlaces a.boton:hover { background: var(--rojo-brillante); }
+
+/* FOOTER compartido */
+.footer-marca { text-align: center; padding: 2.5rem 1.5rem; color: var(--hueso-tenue); font-size: 0.85rem; }
+.footer-marca .marca-titulo { font-size: 1.1rem; color: var(--hueso); display: block; margin-bottom: 0.5rem; }
+.footer-marca .info-footer { display: flex; justify-content: center; gap: 2.5rem; flex-wrap: wrap; margin: 1.2rem 0 1.8rem; font-size: 0.88rem; }
+.footer-marca .bloque { color: var(--hueso-tenue); }
+.footer-marca .bloque strong { display: block; color: var(--hueso); font-family: 'Bebas Neue', sans-serif; letter-spacing: 0.05em; font-size: 0.95rem; margin-bottom: 0.2rem; }
+.footer-marca .redes a { text-decoration: none; color: var(--rojo-brillante); font-weight: 600; }
+.footer-marca .redes a:hover { color: var(--hueso); }
+
+.cta-marca {
+    display: inline-block; text-decoration: none;
+    background: var(--rojo); color: var(--hueso); font-weight: 600;
+    padding: 0.9rem 2.2rem; border-radius: 2px; letter-spacing: 0.03em;
+    transition: background 0.2s ease, transform 0.2s ease;
+}
+.cta-marca:hover { background: var(--rojo-brillante); transform: translateY(-1px); }
+
+/* ===== Tema oscuro para páginas que siguen usando Tailwind ===== */
+/* (formularios de reserva, login/registro, "Mi cuenta") */
+body.tema-oscuro {
+    background-color: var(--negro) !important;
+    background-image: repeating-linear-gradient(0deg, rgba(255,255,255,0.015) 0px, rgba(255,255,255,0.015) 1px, transparent 1px, transparent 3px);
+    color: var(--hueso-tenue);
+    font-family: 'Work Sans', sans-serif;
+}
+body.tema-oscuro .bg-white,
+body.tema-oscuro .bg-gray-100 { background-color: var(--negro-tarjeta) !important; }
+body.tema-oscuro .shadow,
+body.tema-oscuro .shadow-md,
+body.tema-oscuro .shadow-sm { box-shadow: 0 4px 18px rgba(0,0,0,0.4) !important; }
+body.tema-oscuro h1, body.tema-oscuro h2, body.tema-oscuro h3,
+body.tema-oscuro .text-gray-800, body.tema-oscuro .text-gray-900 { color: var(--hueso) !important; }
+body.tema-oscuro .text-gray-500, body.tema-oscuro .text-gray-600, body.tema-oscuro .text-gray-700 { color: var(--hueso-tenue) !important; }
+body.tema-oscuro label { color: var(--hueso-tenue) !important; }
+body.tema-oscuro input, body.tema-oscuro select, body.tema-oscuro textarea {
+    background-color: #2a2826 !important;
+    border-color: var(--linea) !important;
+    color: var(--hueso) !important;
+}
+body.tema-oscuro input::placeholder { color: #756a5f !important; }
+body.tema-oscuro .bg-gray-800 { background-color: var(--rojo) !important; }
+body.tema-oscuro .hover\:bg-gray-700:hover { background-color: var(--rojo-brillante) !important; }
+body.tema-oscuro .border-b, body.tema-oscuro .border-gray-100 { border-color: var(--linea) !important; }
+body.tema-oscuro table thead tr { border-color: var(--linea) !important; }
+body.tema-oscuro table tr.border-b { border-color: var(--linea) !important; }
+body.tema-oscuro a.text-blue-600 { color: var(--rojo-brillante) !important; }

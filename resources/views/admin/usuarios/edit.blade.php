@@ -61,6 +61,25 @@
                                class="mt-1 block w-full rounded border-gray-300">
                     </div>
 
+                    @if ($usuario->rol->nombre === 'Staff')
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Especialidad</label>
+                            <input type="text" name="especialidad" value="{{ old('especialidad', $usuario->peluquero?->especialidad) }}"
+                                   class="mt-1 block w-full rounded border-gray-300">
+                        </div>
+                    
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Descripción</label>
+                            <textarea name="descripcion" class="mt-1 block w-full rounded border-gray-300">{{ old('descripcion', $usuario->peluquero?->descripcion) }}</textarea>
+                        </div>
+                    
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Salario mensual</label>
+                            <input type="number" step="0.01" name="salario_mensual" value="{{ old('salario_mensual', $usuario->peluquero?->salario_mensual) }}"
+                                   class="mt-1 block w-full rounded border-gray-300">
+                        </div>
+                    @endif
+
                     <div>
                         <label class="block text-sm font-medium text-gray-700">Estado</label>
                         <select name="estado" class="mt-1 block w-full rounded border-gray-300" required>

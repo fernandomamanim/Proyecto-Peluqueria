@@ -31,6 +31,9 @@
                         <x-nav-link :href="route('admin.productos.index')" :active="request()->routeIs('admin.productos.*') || request()->routeIs('admin.proveedores.*')">
                             {{ __('Productos') }}
                         </x-nav-link>
+                        <x-nav-link :href="route('admin.reportes.index')" :active="request()->routeIs('admin.reportes.*')">
+                            {{ __('Reportes') }}
+                        </x-nav-link>
                     @endif
 
                     @if (auth()->user()->esStaff())
@@ -39,6 +42,9 @@
                         </x-nav-link>
                         <x-nav-link :href="route('staff.reservas.index')" :active="request()->routeIs('staff.reservas.*')">
                             {{ __('Mis reservas') }}
+                        </x-nav-link>
+                        <x-nav-link :href="route('staff.asistencia.index')" :active="request()->routeIs('staff.asistencia.*')">
+                            {{ __('Mi asistencia') }}
                         </x-nav-link>
                     @endif
                 </div>
@@ -109,6 +115,9 @@
                 <x-nav-link :href="route('admin.productos.index')" :active="request()->routeIs('admin.productos.*') || request()->routeIs('admin.proveedores.*')">
                     {{ __('Productos') }}
                 </x-nav-link>
+                <x-nav-link :href="route('admin.reportes.index')" :active="request()->routeIs('admin.reportes.*')">
+                    {{ __('Reportes') }}
+                </x-nav-link>
             @endif
             
             @if (auth()->user()->esStaff())
@@ -117,6 +126,9 @@
                 </x-responsive-nav-link>
                 <x-nav-link :href="route('staff.reservas.index')" :active="request()->routeIs('staff.reservas.*')">
                     {{ __('Mis reservas') }}
+                </x-nav-link>
+                <x-nav-link :href="route('staff.asistencia.index')" :active="request()->routeIs('staff.asistencia.*')">
+                    {{ __('Mi asistencia') }}
                 </x-nav-link>
             @endif
 

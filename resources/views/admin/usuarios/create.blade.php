@@ -78,6 +78,12 @@
                         <textarea name="descripcion" class="mt-1 block w-full rounded border-gray-300">{{ old('descripcion') }}</textarea>
                     </div>
 
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Salario mensual (solo si el rol es Staff)</label>
+                        <input type="number" step="0.01" name="salario_mensual" value="{{ old('salario_mensual', 0) }}"
+                               class="mt-1 block w-full rounded border-gray-300">
+                    </div>
+
                     <button type="submit" class="bg-gray-800 text-white px-4 py-2 rounded hover:bg-gray-700">
                         Crear usuario
                     </button>

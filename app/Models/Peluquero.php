@@ -13,7 +13,7 @@ class Peluquero extends Model
 
     protected $table = 'peluqueros';
 
-    protected $fillable = ['usuario_id', 'especialidad', 'descripcion', 'estado'];
+    protected $fillable = ['usuario_id', 'especialidad', 'descripcion', 'estado', 'salario_mensual'];
 
     public function usuario(): BelongsTo
     {

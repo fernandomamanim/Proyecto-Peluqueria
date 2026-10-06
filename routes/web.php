@@ -17,6 +17,8 @@ use App\Http\Controllers\Admin\ProductoController;
 use App\Http\Controllers\Admin\ProveedorController;
 use App\Http\Controllers\StaffReservaController;
 use App\Http\Controllers\ReservaProductoController;
+use App\Http\Controllers\AsistenciaController;
+use App\Http\Controllers\Admin\ReporteController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -45,6 +47,24 @@ Route::middleware(['auth', 'rol:Administrador'])->prefix('admin')->name('admin.'
     Route::resource('proveedores', ProveedorController::class)->only(['index', 'store', 'update']);
     Route::resource('productos', ProductoController::class)->except(['show']);
     Route::patch('/productos/{producto}/ajustar-stock', [ProductoController::class, 'ajustarStock'])->name('productos.ajustar-stock');
+    Route::prefix('reportes')->name('reportes.')->group(function () {
+        Route::get('/', [ReporteController::class, 'index'])->name('index');
+
+        Route::get('/financiero', [ReporteController::class, 'financiero'])->name('financiero');
+        Route::get('/financiero/pdf', [ReporteController::class, 'financieroPdf'])->name('financiero.pdf');
+
+        Route::get('/ventas', [ReporteController::class, 'ventas'])->name('ventas');
+        Route::get('/ventas/pdf', [ReporteController::class, 'ventasPdf'])->name('ventas.pdf');
+
+        Route::get('/inventario', [ReporteController::class, 'inventario'])->name('inventario');
+        Route::get('/inventario/pdf', [ReporteController::class, 'inventarioPdf'])->name('inventario.pdf');
+
+        Route::get('/rrhh', [ReporteController::class, 'rrhh'])->name('rrhh');
+        Route::get('/rrhh/pdf', [ReporteController::class, 'rrhhPdf'])->name('rrhh.pdf');
+
+        Route::get('/reservas', [ReporteController::class, 'reservas'])->name('reservas');
+        Route::get('/reservas/pdf', [ReporteController::class, 'reservasPdf'])->name('reservas.pdf');
+    }); 
 });
 
 Route::middleware(['auth', 'rol:Staff,Administrador'])->prefix('staff')->name('staff.')->group(function () {
@@ -60,6 +80,9 @@ Route::middleware(['auth', 'rol:Staff,Administrador'])->prefix('staff')->name('s
     Route::get('/reservas/{reserva}', [StaffReservaController::class, 'show'])->name('reservas.show');
     Route::post('/reservas/{reserva}/productos', [ReservaProductoController::class, 'store'])->name('reservas.productos.store');
     Route::delete('/reservas/{reserva}/productos/{reservaProducto}', [ReservaProductoController::class, 'destroy'])->name('reservas.productos.destroy');
+    Route::get('/asistencia', [AsistenciaController::class, 'index'])->name('asistencia.index');
+    Route::post('/asistencia/entrada', [AsistenciaController::class, 'marcarEntrada'])->name('asistencia.entrada');
+    Route::post('/asistencia/salida', [AsistenciaController::class, 'marcarSalida'])->name('asistencia.salida');
 });
 
 Route::middleware(['auth', 'rol:Cliente'])->group(function () {

@@ -35,7 +35,11 @@
 
                     <dt class="text-gray-500">Código QR</dt>
                     <dd>{{ $reserva->codigo_qr }}</dd>
+
+                    <dt class="text-gray-500 font-semibold">PAGUE AQUI</dt>
+                    <di><img src="{{ asset('images/qrejm.png') }}" alt="La Guarida Barber Studio" class="logo"><di>
                 </dl>
+                
 
                 @if (! $reserva->usuario_id)
                     <p class="text-xs text-gray-500 mt-4">
