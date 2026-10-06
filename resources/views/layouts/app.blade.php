@@ -15,7 +15,7 @@
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
-    <body class="font-sans antialiased {{ auth()->check() && auth()->user()->esCliente() ? 'tema-oscuro' : '' }}">
+    <body class="font-sans antialiased tema-oscuro">
         <div class="min-h-screen bg-gray-100">
             @include('layouts.navigation')
 

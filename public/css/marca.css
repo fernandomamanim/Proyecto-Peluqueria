@@ -69,8 +69,8 @@ body.tema-oscuro {
     color: var(--hueso-tenue);
     font-family: 'Work Sans', sans-serif;
 }
-body.tema-oscuro .bg-white,
-body.tema-oscuro .bg-gray-100 { background-color: var(--negro-tarjeta) !important; }
+body.tema-oscuro .bg-gray-100 { background-color: var(--negro) !important; }
+body.tema-oscuro .bg-white { background-color: var(--negro-tarjeta) !important; }
 body.tema-oscuro .shadow,
 body.tema-oscuro .shadow-md,
 body.tema-oscuro .shadow-sm { box-shadow: 0 4px 18px rgba(0,0,0,0.4) !important; }
@@ -90,3 +90,21 @@ body.tema-oscuro .border-b, body.tema-oscuro .border-gray-100 { border-color: va
 body.tema-oscuro table thead tr { border-color: var(--linea) !important; }
 body.tema-oscuro table tr.border-b { border-color: var(--linea) !important; }
 body.tema-oscuro a.text-blue-600 { color: var(--rojo-brillante) !important; }
+
+/* Línea activa del menú superior (Breeze usa indigo por defecto) */
+body.tema-oscuro nav .border-indigo-400,
+body.tema-oscuro nav .border-indigo-700 { border-color: var(--rojo) !important; }
+body.tema-oscuro nav .text-gray-900 { color: var(--hueso) !important; }
+
+/* Selects pequeños dentro de tablas (ej. ajustar stock, filtros) */
+body.tema-oscuro select.text-xs,
+body.tema-oscuro input.text-xs { background-color: #2a2826 !important; border-color: var(--linea) !important; color: var(--hueso) !important; }
+
+/* Links de acción dentro de tablas (Editar, Ver, etc.) */
+body.tema-oscuro td a.text-blue-600,
+body.tema-oscuro a.text-blue-600 { color: var(--rojo-brillante) !important; }
+body.tema-oscuro a.text-blue-600:hover { color: var(--hueso) !important; }
+
+/* Dropdown del perfil (esquina superior derecha) */
+body.tema-oscuro .dropdown-content,
+body.tema-oscuro [class*="origin-top"] { background-color: var(--negro-tarjeta) !important; }
