@@ -37,9 +37,6 @@
                     @endif
 
                     @if (auth()->user()->esStaff())
-                        <x-nav-link :href="route('staff.horarios.index')" :active="request()->routeIs('staff.horarios.*')">
-                            {{ __('Mis horarios') }}
-                        </x-nav-link>
                         <x-nav-link :href="route('staff.reservas.index')" :active="request()->routeIs('staff.reservas.*')">
                             {{ __('Mis reservas') }}
                         </x-nav-link>
