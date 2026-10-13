@@ -49,14 +49,16 @@
                                     @endif
                                 </td>
                                 <td class="py-2 space-x-2">
-                                    <form method="POST" action="{{ route('staff.pagos.aprobar', $pago) }}" class="inline">
+                                    <form method="POST" action="{{ route('staff.pagos.aprobar', $pago) }}" class="inline"
+                                        onsubmit="return confirm('¿Está seguro de APROBAR esta reserva?.')">
                                         @csrf
                                         @method('PATCH')
                                         <button type="submit" class="bg-green-600 text-white px-3 py-1 rounded text-sm hover:bg-green-700">
                                             Aprobar
                                         </button>
                                     </form>
-                                    <form method="POST" action="{{ route('staff.pagos.rechazar', $pago) }}" class="inline">
+                                    <form method="POST" action="{{ route('staff.pagos.rechazar', $pago) }}" class="inline"
+                                        onsubmit="return confirm('¿Está seguro de RECHAZAR esta reserva?')">
                                         @csrf
                                         @method('PATCH')
                                         <button type="submit" class="bg-red-600 text-white px-3 py-1 rounded text-sm hover:bg-red-700">
