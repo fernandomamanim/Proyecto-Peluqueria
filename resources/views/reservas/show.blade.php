@@ -148,11 +148,7 @@
                         @csrf
 
                         <div>
-                            <label class="block text-sm font-medium text-gray-700">Método de pago</label>
-                            <select name="metodo_pago" class="mt-1 block w-full rounded border-gray-300" required>
-                                <option value="QR">QR</option>
-                                <option value="Efectivo">Efectivo</option>
-                            </select>
+                            <label class="block text-sm font-medium text-gray-700">Método de pago - QR</label>
                         </div>
 
                         <div>
