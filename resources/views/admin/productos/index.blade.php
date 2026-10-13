@@ -52,7 +52,7 @@
                                 <td class="py-2">{{ $producto->nombre }}</td>
                                 <td class="py-2">{{ $producto->proveedor?->nombre ?? '—' }}</td>
                                 <td class="py-2">Bs {{ $producto->precio }}</td>
-                                <td class="py-2 {{ $producto->stock <= 5 ? 'text-red-600 font-semibold' : '' }}">
+                                <td class="py-2 {{ $producto->stock <= 5 ? 'text-red-600 font-semibold' : '' }} text-blue-600 font-semibold">
                                     {{ $producto->stock }}
                                 </td>
                                 <td class="py-2">
