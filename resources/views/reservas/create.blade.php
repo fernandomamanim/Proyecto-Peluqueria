@@ -67,6 +67,13 @@
                             </select>
                         </div>
 
+                        <div class="bg-white shadow rounded-lg p-6 h-fit">
+                            <h3 class="text-sm font-semibold text-gray-700 mb-3">Disponibilidad</h3>
+                            <div id="panel-disponibilidad" class="text-sm text-gray-500">
+                                Selecciona un peluquero y una fecha para ver los horarios ocupados.
+                            </div>
+                        </div>
+
                         <div>
                             <label class="block text-sm font-medium text-gray-700">Fecha</label>
                             <input type="date" name="fecha" id="fecha" min="{{ now()->format('Y-m-d') }}"
@@ -87,12 +94,7 @@
                     </form>
                 </div>
 
-                <div class="bg-white shadow rounded-lg p-6 h-fit">
-                    <h3 class="text-sm font-semibold text-gray-700 mb-3">Disponibilidad</h3>
-                    <div id="panel-disponibilidad" class="text-sm text-gray-500">
-                        Selecciona un peluquero y una fecha para ver los horarios ocupados.
-                    </div>
-                </div>
+                
 
             </div>
         </div>
